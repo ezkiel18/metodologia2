@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import dayjs from "../lib/dayjs";
 import { getReservas, cancelarReserva } from "../api/reservas";
 import type { Reserva } from "../api/types";
+import toast from "react-hot-toast";
 
 const USUARIO_ID = "usuario-demo"; // mismo que en Home
 
@@ -30,19 +31,20 @@ export default function MisReservas() {
   useEffect(() => { cargar(); }, []);
 
   async function onCancelar(r: Reserva) {
-    setErr(null); setMsg(null);
-    // Validación UI (el backend también valida)
+    setErr(null);
     const horas = dayjs(r.inicio).diff(dayjs(), "hour");
+
     if (horas < 12) {
-      setErr("No se puede cancelar con menos de 12 horas de anticipación.");
+      toast.error("No se puede cancelar con menos de 12 horas de anticipación.");
       return;
     }
+
     try {
       await cancelarReserva(r.id);
-      setMsg("Reserva cancelada correctamente.");
+      toast.success("Reserva cancelada correctamente");
       await cargar();
     } catch (e: any) {
-      setErr(e.message);
+      toast.error(e.message ?? "Error al cancelar la reserva");
     }
   }
 
@@ -59,15 +61,20 @@ export default function MisReservas() {
         <p className="mt-4">No tenés reservas para hoy.</p>
       ) : (
         <ul className="mt-4 grid gap-3">
-          {reservas.map(r => (
-            <li key={r.id} className="border rounded p-3">
-              <div><b>Cancha:</b> {r.idCancha}</div>
-              <div><b>Inicio:</b> {dayjs(r.inicio).format("DD/MM HH:mm")}</div>
-              <div><b>Fin:</b> {dayjs(r.fin).format("DD/MM HH:mm")}</div>
-              <div><b>Precio:</b> ${r.precio}</div>
+          {reservas.map((r) => (
+            <li
+              key={r.id}
+              className="border bg-white rounded-lg p-4 shadow-sm flex items-center justify-between"
+            >
+              <div>
+                <p><b>Cancha:</b> {r.idCancha}</p>
+                <p><b>Horario:</b> {dayjs(r.inicio).format("DD/MM HH:mm")} – {dayjs(r.fin).format("HH:mm")}</p>
+                <p><b>Precio:</b> ${r.precio}</p>
+              </div>
+
               <button
                 onClick={() => onCancelar(r)}
-                className="mt-2 px-3 py-1 rounded bg-gray-200 hover:bg-gray-300"
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
               >
                 Cancelar
               </button>

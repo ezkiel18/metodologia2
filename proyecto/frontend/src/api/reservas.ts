@@ -9,9 +9,16 @@ export async function getReservas(params?: { fecha?: string; idCancha?: string }
 export async function crearReserva(payload: {
   idCancha: string;
   idUsuario: string;
-  inicio: string;
+  inicio: string; 
 }) {
-  const { data } = await api.post<Reserva>("/reservas", payload);
+  const body = {
+    idCancha: payload.idCancha,
+    idUsuario: payload.idUsuario,
+    inicioISO: payload.inicio, 
+    pagado: false,             
+  };
+
+  const { data } = await api.post<Reserva>("/reservas", body);
   return data;
 }
 

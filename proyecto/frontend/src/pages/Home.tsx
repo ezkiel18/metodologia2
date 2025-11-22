@@ -4,11 +4,14 @@ import { suscribirListaEspera } from "../api/listaEspera";
 import { buildSlots } from "../utils/time";
 import dayjs from "../lib/dayjs";
 import CanchaSelector from "../components/CanchaSelector";
+import toast from "react-hot-toast";
+import SlotButton from "../components/SlotButton";
 
 const USUARIO_ID = "usuario-demo";
 
 export default function Home() {
   const [fecha, setFecha] = useState(dayjs().format("YYYY-MM-DD"));
+  const hoy = dayjs().format("YYYY-MM-DD");
   const [canchaId, setCanchaId] = useState("1");
   const [slots, setSlots] = useState<string[]>([]);
   const [reservas, setReservas] = useState<any[]>([]);
@@ -58,9 +61,9 @@ export default function Home() {
         inicio: slot,
       });
       await cargarReservas();
-      alert("✅ Reserva creada");
+      toast.success("Reserva creada correctamente");
     } catch (err: any) {
-      alert(`❌ ${err.message}`);
+      toast.error(err.message ?? "Error al crear la reserva");
     }
   }
 
@@ -71,15 +74,15 @@ export default function Home() {
         idUsuario: USUARIO_ID,
         inicio: slot,
       });
-      alert("🔔 Te suscribiste a la lista de espera");
+      toast.success("Te suscribiste a la lista de espera para ese horario");
     } catch (err: any) {
-      alert(`❌ ${err.message}`);
+      toast.error(err.message ?? "Error al suscribirte a la lista de espera");
     }
   }
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold">Sistema de reservas de pádel</h1>
+      <h1 className="text-2xl font-bold mb-4">Sistema de reservas de pádel</h1>
 
       <div className="flex gap-4 items-center mt-3">
         <label className="flex items-center gap-2">
@@ -88,6 +91,7 @@ export default function Home() {
             type="date"
             value={fecha}
             onChange={(e) => setFecha(e.target.value)}
+            min={hoy} 
             className="border p-1"
           />
         </label>
@@ -99,24 +103,26 @@ export default function Home() {
       {loading && <p className="mt-3">Cargando disponibilidad…</p>}
 
       {!loading && (
-        <div className="grid grid-cols-3 gap-3 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           {slots.map((s) => {
             const ocupado = estaOcupado(s);
             const hora = dayjs(s).format("HH:mm");
+
+            const esHoy = fecha === hoy;
+            const esPasado = esHoy && dayjs(s).isBefore(dayjs(), "minute");
+
+            const deshabilitado = ocupado || esPasado;
+
             return (
-              <button
+              <SlotButton
                 key={s}
-                disabled={false} // dejamos click activo; si está ocupado, suscribe a espera
-                onClick={() => (ocupado ? handleEsperar(s) : handleReservar(s))}
-                className={`p-3 rounded text-sm ${
-                  ocupado
-                    ? "bg-red-300 hover:bg-red-400"
-                    : "bg-green-300 hover:bg-green-400"
-                }`}
-                title={ocupado ? "Ocupado — avisarme si se libera" : "Reservar"}
-              >
-                {hora} {ocupado ? "— ocupado" : ""}
-              </button>
+                hora={hora}
+                ocupado={deshabilitado}
+                onClick={() => {
+                  if (deshabilitado) return;
+                  return ocupado ? handleEsperar(s) : handleReservar(s);
+                }}
+              />
             );
           })}
         </div>
