@@ -1,26 +1,23 @@
-Dependencias
-
+# Dependencias
 node_modules
 /node_modules
 proyecto/backend/node_modules
 proyecto/frontend/node_modules
 
-Código compilado
-
+# Código compilado
 /dist
 
-Logs
-
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-Archivos de entorno
-
+# Archivos de entorno
 .env
 .env.local
 
-IDE
-
+# IDE y Sistema Operativo
 .vscode/
 .idea/
+.DS_Store
+Thumbs.db
