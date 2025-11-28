@@ -22,6 +22,8 @@ Observer: Para notificar a los usuarios cuando un turno de su interes este dispo
 
 Ejemplo: La cancha 1 ya está ocupada a las 16:00, un usuario X marca que le interesaria la cancha 1 a las 16:00, si el turno se llega a cancelar este usuario recibirá una notificación diciendo que está disponible.
 
+Esta pagina es unicamente para un complejo de canchas de padel, todas las canchas tienen la misma calidad por lo que todas tienen el mismo precio, los partidos son de 90 minutos por lo que todos los turnos tienen esa duracion.
+
 
 🚀 Guía de Instalación y Uso
 
@@ -57,4 +59,8 @@ Para ejecutar los test:
 Ejecutar la aplicación en modo desarrollo:
 
     npm run dev
+
+Al ejecutar Backend y Frontend se podra ver la pagina funcional en:
+
+    http://localhost:5173/
 
