@@ -21,3 +21,40 @@ Singleton: Para garantizar una sola conexión compartida a la base de datos.
 Observer: Para notificar a los usuarios cuando un turno de su interes este disponible
 
 Ejemplo: La cancha 1 ya está ocupada a las 16:00, un usuario X marca que le interesaria la cancha 1 a las 16:00, si el turno se llega a cancelar este usuario recibirá una notificación diciendo que está disponible.
+
+
+🚀 Guía de Instalación y Uso
+
+🔧 Backend
+
+Abrir una terminal y ubicarse en la carpeta backend/
+
+Instalar dependencias:
+
+    npm install
+
+Para ejecutar los test:
+    
+    npm run test
+
+Iniciar el servidor en modo desarrollo:
+
+    npm run dev
+
+🎨 Frontend
+
+Abrir otra terminal y ubicarse en la carpeta frontend/
+
+Instalar dependencias:
+
+    npm install
+
+Para ejecutar los test:
+    
+    npm run test
+
+
+Ejecutar la aplicación en modo desarrollo:
+
+    npm run dev
+
