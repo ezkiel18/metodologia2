@@ -47,11 +47,13 @@ export default function Home() {
     }
   }
 
-  function estaOcupado(slot: string) {
-    return reservas.some((r) =>
+function estaOcupado(slot: string) {
+  return reservas.some(
+    (r) =>
+      r.idCancha === canchaId &&    //filtra por cancha
       dayjs(slot).isBetween(r.inicio, r.fin, "minute", "[)")
-    );
-  }
+  );
+}
 
   async function handleReservar(slot: string) {
     try {
